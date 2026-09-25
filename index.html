@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Emlak müşteri ve portföy notları için hızlı kayıt aracı">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Hızlı Not">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <title>Hızlı Not · Müşteri &amp; Portföy</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="brand"><span class="brand-mark">⌂</span> HADOLİN EMLAK · HIZLI NOT</div>
+    <h1>Müşteri &amp; <span>Portföy</span> Defteri</h1>
+    <p>Numarayı yaz · ne aradığını söyle · kaydet</p>
+  </header>
+
+  <p class="print-head" id="printHead">HADOLİN EMLAK · Müşteri &amp; Portföy Defteri</p>
+
+  <nav class="tabs" aria-label="Kayıt türleri">
+    <button class="tab-btn active" id="tab-musteri" type="button">👤 Müşteri <span class="badge" id="badgeMusteri">0</span></button>
+    <button class="tab-btn" id="tab-portfoy" type="button">🏠 Portföy <span class="badge" id="badgePortfoy">0</span></button>
+  </nav>
+
+  <main>
+    <!-- ==================== MÜŞTERİ ==================== -->
+    <section class="panel active" id="panel-musteri">
+      <button class="composer-toggle open" id="musteriToggle" type="button">
+        <span id="musteriToggleLabel">✕ Formu kapat</span>
+      </button>
+
+      <form class="card composer" id="musteriForm" autocomplete="on" novalidate>
+        <div class="card-top">
+          <div class="card-icon">👤</div>
+          <div><h2 id="musteriFormTitle">Yeni Müşteri Notu</h2><p>Telefonu ve arama konusunu yaz, tek tuşla kaydet</p></div>
+        </div>
+
+        <div class="form-body">
+          <div class="draft-bar">💾 Taslak otomatik kaydedilir — yarım kalsanız da not kaybolmaz</div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="m_ad">Ad Soyad</label>
+              <input id="m_ad" name="ad" autocomplete="name" autocapitalize="words" placeholder="Örn. Ahmet Yılmaz" enterkeyhint="next">
+            </div>
+            <div class="field">
+              <label for="m_tel">Cep Numarası <span class="required">*</span></label>
+              <input id="m_tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="05XX XXX XX XX" enterkeyhint="next">
+            </div>
+            <div class="field full">
+              <label for="m_neAradi">Ne Aradı? <span class="required">*</span></label>
+              <textarea id="m_neAradi" name="neAradi" rows="3" placeholder="Örn. Çerkezköy'de 3+1 kiralık daire arıyor, 25.000 TL bütçesi var, cumartesi yerinde görmek istiyor"></textarea>
+            </div>
+            <div class="field">
+              <label for="m_butce">Bütçesi</label>
+              <input id="m_butce" name="butce" placeholder="Örn. 25.000 TL / 4.500.000 TL" enterkeyhint="next">
+            </div>
+            <div class="field">
+              <label for="m_semt">Aradığı Bölge</label>
+              <input id="m_semt" name="semt" placeholder="Örn. Çerkezköy merkez" enterkeyhint="next">
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Etiketler (isteğe bağlı)</div>
+            <div class="chips" id="mEtiketler">
+              <label class="chip"><input type="checkbox" name="etiket" value="Yeni ev arıyor"><span>Yeni ev arıyor</span></label>
+              <label class="chip"><input type="checkbox" name="etiket" value="Kiralık arıyor"><span>Kiralık arıyor</span></label>
+              <label class="chip"><input type="checkbox" name="etiket" value="Satmak istiyor"><span>Satmak istiyor</span></label>
+              <label class="chip"><input type="checkbox" name="etiket" value="Yerinde görmek"><span>Yerinde görmek</span></label>
+              <label class="chip"><input type="checkbox" name="etiket" value="Fiyat sordu"><span>Fiyat sordu</span></label>
+              <label class="chip"><input type="checkbox" name="etiket" value="Tekrar arayacağım"><span>Tekrar arayacağım</span></label>
+              <label class="chip"><input type="checkbox" name="etiket" value="Yatırımcı"><span>Yatırımcı</span></label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="m_notlar">Ek Not</label>
+            <textarea id="m_notlar" name="notlar" rows="2" placeholder="Randevu saati, kredi durumu, eş tercihi vb."></textarea>
+          </div>
+        </div>
+
+        <div class="actionbar">
+          <button class="btn btn-gold btn-full" id="musteriSave" type="submit"><span>💾</span><span id="musteriSaveLabel">Kaydet</span></button>
+        </div>
+      </form>
+
+      <div class="list-card">
+        <h3 class="print-title">MÜŞTERİ NOTLARI</h3>
+        <div class="list-toolbar">
+          <input class="search-box" id="musteriSearch" type="search" placeholder="🔍 İsim, numara veya konu ara..." enterkeyhint="search">
+          <select class="sort-select" id="musteriSort">
+            <option value="newest">🕐 En Yeni</option>
+            <option value="oldest">📅 En Eski</option>
+            <option value="name">🔤 Ada Göre</option>
+          </select>
+        </div>
+        <div class="list-meta"><span id="musteriCount">0 kayıt</span></div>
+        <div class="record-list" id="musteriList"></div>
+      </div>
+    </section>
+
+    <!-- ==================== PORTFÖY ==================== -->
+    <section class="panel" id="panel-portfoy">
+      <button class="composer-toggle" id="portfoyToggle" type="button">
+        <span id="portfoyToggleLabel">＋ Yeni Portföy Kaydı</span>
+      </button>
+
+      <form class="card composer collapsed" id="portfoyForm" autocomplete="on" novalidate>
+        <div class="card-top">
+          <div class="card-icon">🏠</div>
+          <div><h2 id="portfoyFormTitle">Yeni Portföy Kaydı</h2><p>Özellikler, sahibi ve konum bilgisi</p></div>
+        </div>
+
+        <div class="form-body">
+          <div class="draft-bar">💾 Taslak otomatik kaydedilir — yarım kalsanız da not kaybolmaz</div>
+
+          <div class="grid g2">
+            <div class="field full">
+              <label for="p_baslik">Portföy Başlığı <span class="required">*</span></label>
+              <input id="p_baslik" name="baslik" autocapitalize="sentences" placeholder="Örn. Çerkezköy Merkez 3+1 Daire" enterkeyhint="next">
+            </div>
+            <div class="field">
+              <label for="p_tur">Portföy Türü</label>
+              <select id="p_tur" name="tur">
+                <option value="Daire">Daire</option>
+                <option value="Dükkan">Dükkan</option>
+                <option value="Ofis">Ofis</option>
+                <option value="Fabrika">Fabrika</option>
+                <option value="Arsa">Arsa</option>
+                <option value="Hisse">Hisse</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="p_durum">Durum</label>
+              <select id="p_durum" name="durum">
+                <option value="Satılık">Satılık</option>
+                <option value="Kiralamaya">Kiralamaya</option>
+                <option value="Satıldı / Kiralandı">Satıldı / Kiralandı</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="p_fiyat">Fiyat</label>
+              <input id="p_fiyat" name="fiyat" inputmode="numeric" placeholder="Örn. 4.250.000" enterkeyhint="next">
+            </div>
+            <div class="field">
+              <label for="p_oda">Oda Sayısı</label>
+              <input id="p_oda" name="oda" placeholder="Örn. 3+1" enterkeyhint="next">
+            </div>
+            <div class="field">
+              <label for="p_m2">m²</label>
+              <input id="p_m2" name="m2" inputmode="numeric" placeholder="Örn. 140" enterkeyhint="next">
+            </div>
+            <div class="field">
+              <label for="p_kat">Kat / Bulunduğu Yer</label>
+              <input id="p_kat" name="kat" placeholder="Örn. 5. kat" enterkeyhint="next">
+            </div>
+            <div class="field">
+              <label for="p_binaYasi">Bina Yaşı</label>
+              <input id="p_binaYasi" name="binaYasi" inputmode="numeric" placeholder="Örn. 12 yaşında" enterkeyhint="next">
+            </div>
+            <div class="field">
+              <label for="p_iskan">İskan Durumu</label>
+              <select id="p_iskan" name="iskan">
+                <option value="">Belirtilmedi</option>
+                <option value="İskânlı">İskânlı</option>
+                <option value="İskânsız">İskânsız</option>
+                <option value="Kısmen iskânlı">Kısmen iskânlı</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="p_ozellikler">Özellikler</label>
+              <textarea id="p_ozellikler" name="ozellikler" rows="2" placeholder="Örn. Yeni boyanmış, balkonlu, otoparklı, eşyalı, cephesi güney"></textarea>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="section">
+            <div class="section-title">Konum Bilgisi</div>
+            <div class="grid g2">
+              <div class="field"><label for="p_il">İl</label><input id="p_il" name="il" placeholder="Örn. Tekirdağ" enterkeyhint="next"></div>
+              <div class="field"><label for="p_ilce">İlçe</label><input id="p_ilce" name="ilce" placeholder="Örn. Çerkezköy" enterkeyhint="next"></div>
+              <div class="field"><label for="p_mahalle">Mahalle</label><input id="p_mahalle" name="mahalle" placeholder="Mahalle adı" enterkeyhint="next"></div>
+              <div class="field"><label for="p_sokak">Sokak / Kapı No</label><input id="p_sokak" name="sokak" placeholder="Sokak adı ve kapı no" enterkeyhint="next"></div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="section">
+            <div class="section-title">Sahibi ve Kaynak</div>
+            <div class="grid g2">
+              <div class="field"><label for="p_sahibi">Portföy Sahibi / Malik</label><input id="p_sahibi" name="sahibi" autocomplete="name" placeholder="Örn. Mehmet Demir" enterkeyhint="next"></div>
+              <div class="field"><label for="p_sahibiTel">Sahibinin Cep Numarası</label><input id="p_sahibiTel" name="sahibiTel" type="tel" inputmode="tel" placeholder="05XX XXX XX XX" enterkeyhint="next"></div>
+              <div class="field full">
+                <label for="p_kaynak">Kimden Geldi?</label>
+                <input id="p_kaynak" name="kaynak" list="kaynakList" placeholder="Örn. Müşteri referansı" enterkeyhint="next">
+                <datalist id="kaynakList">
+                  <option value="Sahibi"></option>
+                  <option value="Müşteri referansı"></option>
+                  <option value="Portföy ofisi"></option>
+                  <option value="Sosyal medya / İlan"></option>
+                  <option value="Yakın çevre / Tanıdık"></option>
+                  <option value="Tapu / Resmî evrak"></option>
+                  <option value="Diğer"></option>
+                </datalist>
+              </div>
+              <div class="field full">
+                <label for="p_notlar">Ek Not</label>
+                <textarea id="p_notlar" name="notlar" rows="2" placeholder="Tapu durumu, kredi uygunluğu, pazarlık notu, görüşme kaydı vb."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actionbar">
+          <button class="btn btn-gold btn-full" id="portfoySave" type="submit"><span>💾</span><span id="portfoySaveLabel">Kaydet</span></button>
+        </div>
+      </form>
+
+      <div class="list-card">
+        <h3 class="print-title">PORTFÖY KAYITLARI</h3>
+        <div class="list-toolbar">
+          <input class="search-box" id="portfoySearch" type="search" placeholder="🔍 Başlık, konum, sahibi veya özellik ara..." enterkeyhint="search">
+          <select class="sort-select" id="portfoySort">
+            <option value="newest">🕐 En Yeni</option>
+            <option value="oldest">📅 En Eski</option>
+            <option value="name">🔤 Başlığa Göre</option>
+            <option value="price">💰 Fiyata Göre</option>
+          </select>
+        </div>
+        <div class="list-meta"><span id="portfoyCount">0 kayıt</span></div>
+        <div class="record-list" id="portfoyList"></div>
+      </div>
+    </section>
+  </main>
+
+  <section class="backup">
+    <button class="backup-toggle" id="backupToggle" type="button">💾 Yedekleme ve Geri Yükleme ▾</button>
+    <div class="backup-body" id="backupBody">
+      <div class="notice blue">Tüm notlar yalnızca bu telefonda (tarayıcı) saklanır. Telefonu değiştirmeden önce <strong>Yedek Al</strong> ile JSON dosyası indirip iCloud Drive veya e-postanıza gönderin.</div>
+      <div class="backup-grid">
+        <button class="small-btn gold" id="exportButton" type="button">📤 Yedek Al (JSON)</button>
+        <button class="small-btn" id="exportCsvButton" type="button">📊 Excel / CSV</button>
+        <label class="small-btn import-label">📥 Geri Yükle<input id="importInput" type="file" accept="application/json,.json"></label>
+        <button class="small-btn" id="printButton" type="button">🖨️ Yazdır</button>
+        <button class="small-btn danger" id="clearAllButton" type="button">🗑️ Tümünü Sil</button>
+      </div>
+      <div class="storage-info" id="storageInfo">—</div>
+    </div>
+  </section>
+
+  <p class="footer-note">Veriler yalnızca bu cihazda saklanır ve hiçbir sunucuya gönderilmez. Düzenli olarak yedek almayı unutmayın.</p>
+
+  <div class="toast" id="toast" role="status"><span id="toastMsg"></span><button class="toast-action" id="toastAction" type="button" hidden></button></div>
+
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-icon" id="modalIcon">⚠️</div>
+      <h3 id="modalTitle">Emin misiniz?</h3>
+      <p id="modalText">Bu işlem geri alınamaz.</p>
+      <div class="modal-actions" id="modalActions">
+        <button class="modal-cancel" id="modalCancelButton" type="button">Vazgeç</button>
+        <button class="modal-confirm" id="modalConfirmButton" type="button">Evet</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
